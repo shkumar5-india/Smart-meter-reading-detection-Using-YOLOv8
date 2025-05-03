@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meter Reading Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ccc;
+      background-size: cover;
+      background-position: center;
+      background-blend-mode: overlay;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;  /* Ensure body takes the full height of the viewport */
+    }
+
+    .letterhead img {
+      width: 400%;
+      max-height: 150px;
+      margin: 0 auto;
+      border-bottom: 2px solid #ddd;
+    }
+
+    marquee {
+      background: linear-gradient(70deg, rgb(6, 6, 50));
+      padding:20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+      flex: 1; /* This ensures the container expands to push the footer down */
+    }
+
+    .container h1 {
+      color: blue;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .upload-form input[type="file"] {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 2px dashed #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      color: red;
+      cursor: pointer;
+    }
+
+    .upload-form button {
+      padding: 10px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #1b06fc;
+      color: white;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .upload-form button:hover {
+      background: linear-gradient(70deg, black, red);
+    }
+
+    h2 {
+      margin-top: 30px;
+      background: linear-gradient(70deg, black, red, white);
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 20px;
+    }
+
+    img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin-top: 15px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 12px 20px;
+      font-size: 22px;
+      font-weight: bold;
+      background: linear-gradient(10deg, orange, white, orange);
+      color: #100f0f;
+      border-radius: 10px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    footer {
+      background-color: #f1f1f1;
+      color: #333;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 14px;
+      margin-top: auto;  /* Ensures footer sticks to the bottom */
+      border-top: 2px solid #ccc;
+    }
+
+    footer a {
+      color: #1b06fc;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media screen and (max-width: 600px) {
+      .logo-container h1 {
+        font-size: 18px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Letterhead Image -->
+  <div class="letterhead">
+    <img src="{{ url_for('static', filename='images/letter head.jpg') }}" alt="Letterhead Image">
+  </div>
+
+  <marquee behavior="scroll" direction="left">
+    Welcome 🙏 To The Smart Meter Reading Detection Project Developed By Team Members:
+    Vineeth Kumar, Mukesh Sai, Karthik Reddy, Gowri Manohar, Dariya, Hemanth Kumar, Somesh Kumar,
+    Tarun Reddy, Venkata Lokesh, Pavan, Santhosh, Yaswanth, Guna Shekar
+  </marquee>
+
+  <!-- Main content area -->
+  <main>
+    <div class="container">
+      <h1>Meter Reading Detection</h1>
+
+      <form class="upload-form" action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required />
+        <br />
+        <button type="submit">Upload and Detect</button>
+      </form>
+
+      {% if original_image %}
+        <h2>Original Uploaded Image</h2>
+        <img src="{{ url_for('static', filename=original_image) }}" alt="Original Image" />
+      {% endif %}
+
+      {% if cropped_panel_image %}
+        <h2>Detected Panel</h2>
+        <img src="{{ url_for('static', filename=cropped_panel_image) }}" alt="Cropped Panel" />
+      {% endif %}
+
+      {% if annotated_image %}
+        <h2>Detected Digits</h2>
+        <img src="{{ url_for('static', filename=annotated_image) }}" alt="Annotated Digits" />
+      {% endif %}
+
+      {% if meter_reading %}
+        <div class="result">Detected Meter Reading: {{ meter_reading }} kWh</div>
+      {% endif %}
+
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy 2025 Smart Meter Reading Detection Project (Design Thinking & Innovation)</p>
+  </footer>
+</body>
+</html>
