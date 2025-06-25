@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Meter Reading Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .letterhead img {
+      width: 100%;
+      max-height: 150px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .scroll-banner {
+      background: linear-gradient(70deg, #060632, #0a0a4a);
+      color: white;
+      font-weight: bold;
+      padding: 10px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scroll-text {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 20s linear infinite;
+      padding-left: 100%;
+    }
+
+    @keyframes scroll-left {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      flex: 1;
+    }
+
+    .container h1 {
+      color: #1b06fc;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .upload-form input[type="file"] {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 2px dashed #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .upload-form button {
+      padding: 10px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin: 5px;
+    }
+
+    .upload-form button[type="submit"] {
+      background-color: #1b06fc;
+      color: white;
+    }
+
+    .upload-form button[type="reset"] {
+      background-color: #888;
+      color: white;
+    }
+
+    .upload-form button:hover {
+      background: linear-gradient(70deg, black, red);
+    }
+
+    h2 {
+      margin-top: 30px;
+      color: #333;
+      font-size: 20px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      margin-top: 15px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .preview-image {
+      max-height: 250px;
+      object-fit: contain;
+      display: none;
+      margin: 10px auto;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      background: linear-gradient(45deg, orange, white, orange);
+      color: #100f0f;
+      border-radius: 10px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      display: none;
+      margin: 15px auto;
+    }
+
+    .spinner:after {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 40px;
+      margin: auto;
+      border: 4px solid #1b06fc;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      background-color: #f1f1f1;
+      color: #333;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 14px;
+      border-top: 2px solid #ccc;
+    }
+
+    @media screen and (max-width: 600px) {
+      .container h1 {
+        font-size: 20px;
+      }
+
+      .upload-form input[type="file"],
+      .upload-form button {
+        font-size: 14px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Letterhead -->
+  <div class="letterhead">
+    <img src="{{ url_for('static', filename='images/letter head.jpg') }}" alt="Letterhead Image">
+  </div>
+
+  <!-- Scrolling Banner -->
+  <div class="scroll-banner">
+    <div class="scroll-text">
+      Welcome 🙏 To The Smart Meter Reading Detection Project Developed By Team Members: Mukesh Sai, Gouri Manohar, Hemanth Kumar, Tarun Reddy, Venkata Lokesh, Yaswanth
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <h1>Smart Meter Reading Detection<br>Department of Artificial Intelligence & Data Science</h1>
+
+      <form class="upload-form" action="/" method="POST" enctype="multipart/form-data" onsubmit="showSpinner()">
+        <input type="file" name="image" accept="image/*" required capture="environment" onchange="previewImage(event)" />
+        <img id="preview" class="preview-image" alt="Image Preview" />
+        <br/>
+        <button type="submit">Upload and Detect</button>
+        <button type="reset" onclick="resetPreview()">Reset</button>
+        <div class="spinner" id="loadingSpinner"></div>
+      </form>
+
+      {% if original_image %}
+        <h2>Original Uploaded Image</h2>
+        <img src="{{ url_for('static', filename=original_image) }}" alt="Original Image" />
+      {% endif %}
+
+      {% if cropped_panel_image %}
+        <h2>Detected Panel</h2>
+        <img src="{{ url_for('static', filename=cropped_panel_image) }}" alt="Cropped Panel" />
+      {% endif %}
+
+      {% if annotated_image %}
+        <h2>Detected Digits</h2>
+        <img src="{{ url_for('static', filename=annotated_image) }}" alt="Annotated Digits" />
+      {% endif %}
+
+      {% if meter_reading %}
+        <div class="result">Detected Meter Reading: {{ meter_reading }} kWh</div>
+      {% endif %}
+
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Smart Meter Reading Detection - A Community Service Project (CSP) <br>
+    Department of Artificial Intelligence & Data Science
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function previewImage(event) {
+      const input = event.target;
+      const preview = document.getElementById('preview');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function resetPreview() {
+      document.getElementById('preview').style.display = 'none';
+      document.getElementById('preview').src = '';
+    }
+
+    function showSpinner() {
+      document.getElementById('loadingSpinner').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
