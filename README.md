@@ -1,43 +1,35 @@
-**Change The Branch from main to master to view the project code**
+# ⚡ Smart Meter Reading Detection
 
-                    (or)
-**Follow The Link to view the code : 
+This project is a deep learning–based web application that automatically detects and reads electricity meter readings from images using **YOLOv8** object detection models.
 
-https://github.com/shkumar5-india/Smart-meter-reading-detection-Using-YOLOv8/tree/master
+Developed as a **Community Service Project (CSP)** by students of the **Department of Artificial Intelligence & Data Science**, this tool aims to automate the meter reading process with high accuracy and ease of use.
 
-**
+---
 
+## 🧠 Key Features
 
-Smart Meter Reading Detection Using Deep Learning
+- 🔍 **YOLOv8 Panel Detection** – Identifies the digital panel of the meter.
+- 🔢 **Digit Detection** – Uses a second YOLOv8 model to extract digits from the panel.
+- 📊 **Smart Reading Logic** – Sorts digits left-to-right to reconstruct the reading.
+- 🖼️ **Image Visualization** – Shows original, cropped, and annotated outputs.
+- 📱 **Mobile-Friendly Web App** – Use it directly from your phone browser.
+- 🔐 **Offline Mobile App (In Progress)** – Planning to port as a fully offline Android/iOS app.
 
-This project aims to automate the process of reading electricity meter values from images using deep learning. The solution uses computer vision techniques to detect the LED display panel and extract numeric readings accurately, even under varied conditions like angles, lighting, and obstructions.
+---
 
-
-
-Features
-
-Automatic Detection: Locates the LED panel on the electric meter image.
-
-Digit Segmentation: Identifies individual digits from the panel.
-
-Support for Variability: Handles different meter types, angles, and lighting conditions.
-
-
-
-Training
-
-1. Panel Detection (YOLOv8)
-
-yolo task=detect mode=train data=panel_data.yaml model=yolov8n.pt epochs=100 imgsz=640
-
-2. Digit Detection (YOLOv8/CNN)
-
-yolo task=detect mode=train data=digits_data.yaml model=yolov8n.pt epochs=100 imgsz=640
+## 📸 Sample Output
+![annotated_3442051338](https://github.com/user-attachments/assets/8adbe0f3-e1a8-4781-a8cd-120fc61a023f)
+![3442051338](https://github.com/user-attachments/assets/1fd1ac9d-d57d-4e06-af39-313b75ae8407)
+![cropped_3442051338](https://github.com/user-attachments/assets/0d42ce0c-3cd3-442e-8e99-2f06f65270f9)
 
 
 
-Output
+## 🚀 Getting Started
 
-Annotated image with bounding box around the LED panel
+### 📦 Prerequisites
 
-Final meter reading printed in Front-end Page
+- Python 3.8+
+- [Ultralytics YOLOv8](https://docs.ultralytics.com/)
+- Flask
+- OpenCV
+- Pillow
